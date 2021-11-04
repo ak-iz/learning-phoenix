@@ -21,7 +21,7 @@ defmodule Chat.Message do
   def recent(topic) do
     from m in __MODULE__,
       where: m.topic == ^topic,
-      order_by: [asc: :inserted_at],
+      order_by: [desc: :inserted_at],
       limit: 50
   end
 end

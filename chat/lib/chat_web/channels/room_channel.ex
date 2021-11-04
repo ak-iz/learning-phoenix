@@ -2,10 +2,8 @@ defmodule ChatWeb.RoomChannel do
   use ChatWeb, :channel
 
   alias ChatWeb.{
-    Message,
     MessageView,
-    Presence,
-    Repo
+    Presence
   }
 
   def join("room:lobby", _params, socket) do
