@@ -10,6 +10,7 @@ defmodule ChatWeb.Endpoint do
     signing_salt: "SP4Pxc45"
   ]
 
+  socket "/socket", ChatWeb.UserSocket
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
   # Serve at "/" the static files from "priv/static" directory.
