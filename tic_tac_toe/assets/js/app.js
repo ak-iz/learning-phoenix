@@ -22,15 +22,51 @@ import "../css/app.css"
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
-import {Socket} from "phoenix"
-import {LiveSocket} from "phoenix_live_view"
+import { Socket } from "phoenix"
+import { LiveSocket } from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 
+/////
+// TIC TAC TOE GAME
+/////
+
+import Board from './board.js'
+let socket = new Socket("/socket", { params: {} })
+socket.connect()
+
+let boardContainer = document.getElementById('board')
+let gameId = boardContainer.attributes['data-game-id'].value
+
+let channel = socket.channel(`game:${gameId}`)
+
+channel.join()
+    .receive('error', resp => {
+        alert(`Sorry, you can't join because ${resp.reason}`)
+    })
+
+channel.on('update_board', payload => {
+    let board = new Board(payload.board)
+
+    board.onClick((x, y) => {
+        channel.push('select', { coord: [x, y] })
+            .receive('error', resp => alert(resp.reason))
+    })
+    board.draw(boardContainer)
+})
+
+channel.on('your_turn', payload => {
+    alert('Your turn!')
+})
+
+channel.on('winner', payload => {
+    alert(`${payload.player || 'No one'} wins!`)
+})
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, { params: { _csrf_token: csrfToken } })
 
 // Show progress bar on live navigation and form submits
-topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
+topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" })
 window.addEventListener("phx:page-loading-start", info => topbar.show())
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 
