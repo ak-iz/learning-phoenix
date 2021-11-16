@@ -1,0 +1,20 @@
+<h1>Show Team</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @team.name %>
+  </li>
+  <li>
+   <strong>Players:</strong>
+   <%= for tp <- @team.team_players do %>
+     <br>
+     <%= tp.name %>
+   <% end %>
+ </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.team_path(@conn, :edit, @team) %></span> |
+<span><%= link "Back", to: Routes.team_path(@conn, :index) %></span>

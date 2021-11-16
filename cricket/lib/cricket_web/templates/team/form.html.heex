@@ -1,0 +1,28 @@
+<.form let={f} for={@changeset} action={@action}>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= label f, :name %>
+  <%= text_input f, :name %>
+  <%= error_tag f, :name %>
+
+  <%= label f, :opener_id %>
+  <%= player_select f, @changeset, :opener %>
+  <%= label f, :batsman_id %>
+  <%= player_select f, @changeset, :batsman %>
+  <%= label f, :keeper_id %>
+  <%= player_select f, @changeset, :keeper %>
+  <%= label f, :allrounder_id %>
+  <%= player_select f, @changeset, :allrounder %>
+  <%= label f, :pace_id %>
+  <%= player_select f, @changeset, :pace %>
+  <%= label f, :spin_id %>
+  <%= player_select f, @changeset, :spin %>
+
+  <div>
+    <%= submit "Save" %>
+  </div>
+</.form>

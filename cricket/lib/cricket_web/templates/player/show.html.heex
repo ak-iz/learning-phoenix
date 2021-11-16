@@ -1,0 +1,42 @@
+<h1>Show Player</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @player.name %>
+  </li>
+
+  <li>
+    <strong>Age:</strong>
+    <%= @player.age %>
+  </li>
+
+  <li>
+    <strong>Country:</strong>
+    <%= @player.country %>
+  </li>
+
+  <li>
+    <strong>Hand:</strong>
+    <%= @player.hand %>
+  </li>
+  <li>
+    <strong>Type:</strong>
+    <td>
+        <%= for types <- @player.type do %>
+          <%= types.type %>
+        <% end %>
+      </td>
+  </li>
+  <li>
+    <strong>Skills:</strong>
+    <td>
+        Batting: <%= @player.skills.batting %>
+        Bowling: <%= @player.skills.bowling %>
+      </td>
+  </li>
+</ul>
+
+<span><%= link "Edit", to: Routes.player_path(@conn, :edit, @player) %></span> |
+<span><%= link "Back", to: Routes.player_path(@conn, :index) %></span>

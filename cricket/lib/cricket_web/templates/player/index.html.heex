@@ -1,0 +1,38 @@
+<span><%= link "New Player", to: Routes.player_path(@conn, :new) %></span>
+<h1>Listing Players</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Country</th>
+      <th>Hand</th>
+      <th>Type</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for player <- @players do %>
+    <tr>
+      <td><%= player.name %></td>
+      <td><%= player.age %></td>
+      <td><%= player.country %></td>
+      <td><%= player.hand %></td>
+      <td>
+        <%= for types <- player.type do %>
+          <%= types.type %>
+        <% end %>
+      </td>
+
+      <td>
+        <span><%= link "Show", to: Routes.player_path(@conn, :show, player) %></span>
+        <span><%= link "Edit", to: Routes.player_path(@conn, :edit, player) %></span>
+        <span><%= link "Delete", to: Routes.player_path(@conn, :delete, player), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+

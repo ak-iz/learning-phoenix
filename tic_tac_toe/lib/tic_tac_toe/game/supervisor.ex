@@ -18,7 +18,8 @@ defmodule TicTacToe.Game.Supervisor do
   end
 
   def new_game(id) do
-    start_child(id: [[name: find_game(id)]])
+    IO.inspect(id)
+    start_child(id: id)
   end
 
   def find_game(id) do
