@@ -33,7 +33,9 @@ defmodule ChatWeb.UserSocket do
   # performing token verification on connect.
   @impl true
   def connect(params, socket, _connect_info) do
-    {:ok, assign(socket, :user, params["user"])}
+    username = Chat.get_username_by_id!(params["user"])
+
+    {:ok, assign(socket, :user, username)}
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
