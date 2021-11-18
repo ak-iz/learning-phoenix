@@ -3,6 +3,7 @@ import { Socket, Presence } from 'phoenix'
 class Chat {
     constructor(roomName) {
         this.presences = {}
+        this.presenceLeaves = {}
         this.roomName = roomName
         this.userList = document.getElementById('user-list')
         this.formatPresences = this.formatPresences.bind(this)
@@ -14,7 +15,7 @@ class Chat {
 
     initialize() {
         // Ask for user's name
-        this.user = window.prompt('What is your name?') || 'Anonymous'
+        this.user = document.getElementById('user_id').value
 
         // Set up the web socket connection
         this.socket = new Socket('/socket', { params: { user: this.user } })
@@ -22,7 +23,7 @@ class Chat {
 
         // Set up room
         this.room = this.socket.channel(this.roomName)
-        // Sync presence state
+            // Sync presence state
         this.room.on('presence_state', state => {
             this.presences = Presence.syncState(this.presences, state)
             this.renderPresences(this.presences)
@@ -30,12 +31,13 @@ class Chat {
 
         this.room.on('presence_diff', state => {
             this.presences = Presence.syncDiff(this.presences, state)
+            this.presenceLeaves = Presence.syncState(this.presences, state).leaves
             this.renderPresences(this.presences)
         })
 
         // Setup new message handler
         this.room.on('message:new', this.renderMessage)
-        this.room.on('messages:recent', ({data: messages}) => {
+        this.room.on('messages:recent', ({ data: messages }) => {
             messages.map(this.renderMessage)
         })
 
@@ -67,13 +69,19 @@ class Chat {
     renderPresences(presences) {
         let html = this.formatPresences(presences).map(presence => `
         <li>
-            ${presence.user}
-            <br />
-            <small>online since ${presence.onlineAt}</small>
+            <span class="logged-in" style="color: green">●</span> ${presence.user} <small>(${presence.onlineAt})</small>
         </li>
         `).join('')
 
         this.userList.innerHTML = html
+
+        let newHtml = this.formatPresences(this.presenceLeaves).map(presence => `
+        <li>
+            <span class="logged-out" style="color: red">●</span> ${presence.user} <small>(${presence.onlineAt})</small>
+        </li>
+        `).join('')
+
+        this.userList.innerHTML += newHtml
     }
 
     renderMessage(message) {

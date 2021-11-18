@@ -50,3 +50,8 @@ config :phoenix, :json_library, Jason
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
+
+config :chat, :pow,
+  user: Chat.Users.User,
+  repo: Chat.Repo,
+  web_module: ChatWeb
